@@ -3,8 +3,8 @@ import React from "react";
 import blog2 from "../assets/blog2.png";
 const Hero = () => {
   return (
-    <div className="h-[60vh] max-w-full mx-auto bg-gray-300 py-2">
-      <div className="border-2 mx-w-7xl py-6 my-10 gap-30 flex justify-around items-center ">
+    <div className="h-[90vh] max-w-full mx-auto bg-gray-300 py-2">
+      <div className="border-2  mx-w-7xl py-6 my-10 mb-7 gap-30 flex justify-around items-center ">
         {/* Hero Left side */}
         <div className="border-2 max-w-4xl">
           <h1 className="text-7xl   font-bold pb-2">

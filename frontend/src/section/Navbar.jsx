@@ -4,10 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const Navbar = () => {
+  const user = false;
   return (
-    <div className=" max-w-full mx-auto bg-gray-200 py-2">
+    <div className=" w-full fixed top-0 left-0  mx-auto bg-gray-200 py-2">
       <div className=" md:mx-30 mx-0 flex justify-between items-center ">
         <div className="flex gap-4 items-center">
           {" "}
@@ -43,14 +44,33 @@ const Navbar = () => {
             <Button className="py-2 h-10">
               <Moon className="text-xl font-bold" size={30} />{" "}
             </Button>
-            <Link to="">
-              {" "}
-              <Button className="text-xl h-10">Login</Button>
-            </Link>
-            <Link to="/signup">
-              {" "}
-              <Button className="text-xl h-10">Signup</Button>
-            </Link>
+            {user ? (
+              <>
+                <Link to="/profile">
+                  {" "}
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </Link>
+                <Link to="/logout">
+                  {" "}
+                  <Button className="text-xl h-10">Logout</Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                {" "}
+                <Link to="/login">
+                  {" "}
+                  <Button className="text-xl h-10">Login</Button>
+                </Link>
+                <Link to="/signup">
+                  {" "}
+                  <Button className="text-xl h-10">Signup</Button>
+                </Link>{" "}
+              </>
+            )}
           </div>
         </div>
       </div>

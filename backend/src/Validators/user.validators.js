@@ -9,10 +9,6 @@ const validatorUserRegsiter = ({ userName, email, password }) => {
     return "Invalid eamil fooramt";
   }
 
-  if (!validator.isStrongPassword(password)) {
-    return "Password must be 6 characher, uppercase";
-  }
-
   return null;
 };
 
