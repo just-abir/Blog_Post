@@ -4,16 +4,21 @@ import Hero from "./section/Hero";
 import { Routes, Route } from "react-router-dom";
 import Signup from "./section/Signup.";
 import Login from "./section/Login";
-
+import { Toaster } from "sonner";
+import Dashboard from "./section/Dashboard";
+import Profile from "./Pages/Profile";
 const App = () => {
   return (
     <div className="bg-emerald-900">
       <Navbar />
-
+      <Toaster position="top-left" />
       <Routes>
         <Route path="/" element={<Hero />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="profile" element={<Profile />} />
+        </Route>
       </Routes>
     </div>
   );

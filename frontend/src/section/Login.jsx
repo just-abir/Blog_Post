@@ -2,8 +2,15 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, passOnOff } from "../Redux/Slice/authSlice";
+import { toast } from "sonner";
+import { EyeOff, Eye } from "lucide-react";
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const showPass = useSelector((state) => state.auth.showPass);
+
   const [loading, setloading] = useState(false);
   const [userLoginData, setuserLoginData] = useState({
     email: "",
@@ -27,15 +34,20 @@ const Login = () => {
       );
 
       console.log("Response ", response.data);
-      alert("UserLogin success..");
+      toast.success("User Login Success");
+      dispatch(setUser(response.data.data));
       navigate("/");
     } catch (error) {
       if (error.response) {
         console.error("Server Error:", error.response.data);
-        alert(error.response.data.message);
+        toast.error("Login Failed", {
+          description: error.response?.data?.message || "Something went wrong",
+        });
       } else {
         console.error("Network error ", error.message);
       }
+    } finally {
+      setloading(false);
     }
   };
 
@@ -80,7 +92,7 @@ const Login = () => {
               </div>
 
               {/* Password */}
-              <div>
+              <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Password
                 </label>
@@ -88,10 +100,31 @@ const Login = () => {
                   name="password"
                   onChange={saveLoginInfo}
                   value={userLoginData.password}
-                  type="password"
+                  type={showPass ? "password" : "text"}
                   placeholder="********"
-                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className=" w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+
+                {showPass ? (
+                  <>
+                    <span
+                      onClick={() => dispatch(passOnOff())}
+                      className="absolute top-10 right-2"
+                    >
+                      <EyeOff />
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <span
+                      onClick={() => dispatch(passOnOff())}
+                      className="absolute top-10 right-2"
+                    >
+                      <Eye />
+                    </span>
+                  </>
+                )}
               </div>
 
               {/* Login Button */}

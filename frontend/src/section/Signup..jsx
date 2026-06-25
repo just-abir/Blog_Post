@@ -3,9 +3,15 @@ import auth from "../assets/auth.jpg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
+import { toast } from "sonner";
+import { EyeOff, Eye } from "lucide-react";
+import { passOnOff } from "../Redux/Slice/authSlice";
 const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const showPass = useSelector((state) => state.auth.showPass);
 
   const [userData, setUserData] = useState({
     userName: "",
@@ -27,13 +33,13 @@ const Signup = () => {
         userData,
       );
       console.log("response ", response.data);
-      alert("Registration Successful!");
+      toast.success("Registration Successful!");
 
       navigate("/login");
     } catch (error) {
       if (error.response) {
         console.error("Server Error:", error.response.data);
-        alert(error.response.data.message || "Registration failed!");
+        toast.error(error.response.data.message || "Registration failed!");
       } else {
         console.error("Network Error:", error.message);
       }
@@ -80,16 +86,37 @@ const Signup = () => {
               />
             </div>
 
-            <div>
+            <div className="relative">
               <label className="text-gray-700 text-sm">Password</label>
               <input
                 name="password"
                 value={userData.password}
                 onChange={saveUserInfo}
-                type="password"
+                type={showPass ? "text" : "pass"}
                 placeholder="********"
                 className="w-full mt-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+
+              {showPass ? (
+                <>
+                  <span
+                    onClick={() => dispatch(passOnOff())}
+                    className="absolute top-10 right-2"
+                  >
+                    <EyeOff />
+                  </span>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <span
+                    onClick={() => dispatch(passOnOff())}
+                    className="absolute top-10 right-2"
+                  >
+                    <Eye />
+                  </span>
+                </>
+              )}
             </div>
 
             <button

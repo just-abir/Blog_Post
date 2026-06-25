@@ -64,8 +64,10 @@ const userLogin = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
+    const user = isUserExist.toObject();
+    delete user.password;
 
-    return sendResponse(res, 200, true, "user login success");
+    return sendResponse(res, 200, true, "user login success", user);
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
