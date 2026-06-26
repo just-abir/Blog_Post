@@ -135,20 +135,27 @@ const Navbar = () => {
                           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                         </DropdownMenuItem>{" "}
                       </Link>
-                      <DropdownMenuItem>
-                        <ChartLine />
-                        Your Blog
-                      </DropdownMenuItem>
+                      <Link to="/dashboard/your-blog">
+                        {" "}
+                        <DropdownMenuItem>
+                          <ChartLine />
+                          Your Blog
+                        </DropdownMenuItem>
+                      </Link>
 
-                      <DropdownMenuItem>
-                        <MessageSquare />
-                        Comments
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem>
-                        <PenSquare />
-                        Write Blog
-                      </DropdownMenuItem>
+                      <Link to="/dashboard/comments">
+                        {" "}
+                        <DropdownMenuItem>
+                          <MessageSquare />
+                          Comments
+                        </DropdownMenuItem>
+                      </Link>
+                      <Link to="/dashboard/create-blog">
+                        <DropdownMenuItem>
+                          <PenSquare />
+                          Create Blog
+                        </DropdownMenuItem>
+                      </Link>
                     </DropdownMenuGroup>
 
                     <DropdownMenuGroup className=" pt-1">

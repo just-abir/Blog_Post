@@ -7,6 +7,9 @@ import Login from "./section/Login";
 import { Toaster } from "sonner";
 import Dashboard from "./section/Dashboard";
 import Profile from "./Pages/Profile";
+import YourBlog from "./Pages/YourBlog";
+import Comments from "./Pages/Comments";
+import CreateBlog from "./Pages/CreateBlog";
 const App = () => {
   return (
     <div className="bg-emerald-900">
@@ -18,6 +21,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="profile" element={<Profile />} />
+          <Route path="your-blog" element={<YourBlog />} />
+          <Route path="comments" element={<Comments />} />
+          <Route path="create-blog" element={<CreateBlog />} />
         </Route>
       </Routes>
     </div>
