@@ -31,8 +31,10 @@ const Login = () => {
       const response = await axios.post(
         "http://localhost:5000/api/user/login",
         userLoginData,
+        {
+          withCredentials: true,
+        },
       );
-
       console.log("Response ", response.data);
       toast.success("User Login Success");
       dispatch(setUser(response.data.data));

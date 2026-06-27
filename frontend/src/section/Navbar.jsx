@@ -25,6 +25,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import userLogo from "../assets/userLogo.jpg";
+
 const Navbar = () => {
   const [notifications, setNotifications] = React.useState({
     email: true,
@@ -118,7 +120,7 @@ const Navbar = () => {
                     >
                       <Avatar>
                         <AvatarImage
-                          src="https://github.com/shadcn.png"
+                          src={user.photoUrl || userLogo}
                           alt="shadcn"
                         />
                         <AvatarFallback>LR</AvatarFallback>
