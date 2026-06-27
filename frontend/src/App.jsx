@@ -10,6 +10,7 @@ import Profile from "./Pages/Profile";
 import YourBlog from "./Pages/YourBlog";
 import Comments from "./Pages/Comments";
 import CreateBlog from "./Pages/CreateBlog";
+import UpdateBlog from "./Pages/UpdateBlog";
 const App = () => {
   return (
     <div className="bg-emerald-900">
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="your-blog" element={<YourBlog />} />
           <Route path="comments" element={<Comments />} />
           <Route path="create-blog" element={<CreateBlog />} />
+          <Route path="write-blog/:id" element={<UpdateBlog />} />
         </Route>
       </Routes>
     </div>
