@@ -23,7 +23,9 @@ const CreateBlog = () => {
       console.log(res.data.data);
 
       if (res.data.success) {
+        console.log("Current blog:", blog);
         dispatch(setBlog([...blog, res.data.data]));
+        console.log("New blog:", res.data.data);
         navigate(`/dashboard/write-blog/${res.data.data._id}`);
         toast.success(res.data.data.message);
       }
@@ -75,12 +77,12 @@ const CreateBlog = () => {
             className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
           >
             <option value="">Select a category</option>
-            <option value="ai">AI</option>
-            <option value="web">Web Development</option>
-            <option value="mern">MERN Stack</option>
-            <option value="react">React</option>
-            <option value="node">Node.js</option>
-            <option value="javascript">JavaScript</option>
+            <option value="AI">AI</option>
+            <option value="Web Dev">Web Development</option>
+            <option value="MERN">MERN Stack</option>
+            <option value="React">Reactjs</option>
+            <option value="Nodejs">Node js</option>
+            <option value="Python">Python</option>
           </select>
         </div>
 
