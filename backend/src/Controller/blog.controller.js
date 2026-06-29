@@ -64,4 +64,25 @@ const updateBlog = async (req, res) => {
   }
 };
 
-module.exports = { createBlog, updateBlog };
+const getOwnBlog = async (req, res) => {
+  try {
+    const userId = req.id;
+    if (!userId) {
+      return sendResponse(res, 400, false, "User id is required");
+    }
+
+    const blogs = await blogModel
+      .find({ author: userId })
+      .populate({ path: "author", select: "firstName, lastName, photoUrl" });
+
+    if (!blogs) {
+      return sendResponse(res, 404, false, "No blogs found");
+    }
+
+    sendResponse(res, 200, true, "Get blogs successfully fetched", blogs);
+  } catch (error) {
+    sendResponse(res, 500, false, "Error fetching blosg");
+  }
+};
+
+module.exports = { createBlog, updateBlog, getOwnBlog };

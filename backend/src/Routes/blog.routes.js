@@ -19,5 +19,6 @@ router.put(
   singleUpload,
   blogControllerRoutes.updateBlog,
 );
+router.get("/getBlog", isUserAuth, blogControllerRoutes.getOwnBlog);
 
 module.exports = router;
