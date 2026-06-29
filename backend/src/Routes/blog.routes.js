@@ -20,5 +20,5 @@ router.put(
   blogControllerRoutes.updateBlog,
 );
 router.get("/getBlog", isUserAuth, blogControllerRoutes.getOwnBlog);
-
+router.delete("/deleteBlog/:id", isUserAuth, blogControllerRoutes.deleteBlog);
 module.exports = router;

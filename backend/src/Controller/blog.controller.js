@@ -85,4 +85,24 @@ const getOwnBlog = async (req, res) => {
   }
 };
 
-module.exports = { createBlog, updateBlog, getOwnBlog };
+const deleteBlog = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const authorId = req.id;
+    const blog = await blogModel.findById(blogId);
+    if (!blog) {
+      sendResponse(res, 404, false, "Blog not found ");
+    }
+
+    if (blog.author.toString() !== authorId) {
+      sendResponse(res, 403, false, "unauthorized to delete the blog");
+    }
+
+    await blogModel.findByIdAndDelete(blogId);
+    sendResponse(res, 200, true, "Blog deleted success");
+  } catch (error) {
+    sendResponse(res, 500, false, "Error to delete blosg");
+  }
+};
+
+module.exports = { createBlog, updateBlog, getOwnBlog, deleteBlog };
