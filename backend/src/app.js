@@ -11,7 +11,7 @@ app.use(
   cors({
     origin: "http://localhost:5173", // Tomar frontend port exact bole dite hobe
     credentials: true, // Allow cookies/headers
-    methods: ["GET", "POST", "PUT", "DELETE"], // Request dynamic update limits
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Request dynamic update limits
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );

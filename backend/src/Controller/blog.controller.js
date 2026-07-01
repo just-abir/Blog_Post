@@ -2,6 +2,7 @@ const sendResponse = require("../utils/response.utils");
 const blogModel = require("../models/blog.model");
 const getDataUri = require("../utils/dataUri");
 const cloudinary = require("../utils/cloudinary");
+const userModel = require("../models/user.model");
 
 const createBlog = async (req, res) => {
   try {
@@ -73,7 +74,7 @@ const getOwnBlog = async (req, res) => {
 
     const blogs = await blogModel
       .find({ author: userId })
-      .populate({ path: "author", select: "firstName, lastName, photoUrl" });
+      .populate({ path: "author", select: "firstName lastName photoUrl" });
 
     if (!blogs) {
       return sendResponse(res, 404, false, "No blogs found");
@@ -105,4 +106,107 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-module.exports = { createBlog, updateBlog, getOwnBlog, deleteBlog };
+const getPublishBlog = async (res, req) => {
+  try {
+    const blog = (await blogModel.find({ isPublished: true }))
+      .sort({ createdAt: -1 })
+      .populate({ path: "author", select: "firstName lastName, photoUrl" });
+
+    if (!blog) {
+      return sendResponse(res, 401, false, "Blog not found ");
+    }
+    return sendResponse(res, 200, true, "Published blog Successfully", blog);
+  } catch (error) {
+    return sendResponse(res, 500, false, "Error to published blog");
+  }
+};
+
+const togglePublishedBlog = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const { publish } = req.query;
+
+    const blog = await blogModel.findById(blogId);
+
+    if (!blog) {
+      return sendResponse(res, 404, false, "Blog not found ");
+    }
+
+    blog.isPublished = !blog.isPublished;
+    await blog.save();
+
+    const statusMessage = blog.isPublished ? "Published" : "Unpublished";
+    return sendResponse(res, 200, true, `Blog is ${statusMessage}`);
+  } catch (error) {
+    sendResponse(res, 500, false, "Failed to updated Status");
+  }
+};
+
+const likeInBlog = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const likeUser = req.id;
+
+    const blog = await blogModel.findById(blogId).populate({ path: "like" });
+    if (!blog) {
+      sendResponse(res, 404, false, "Blog not found");
+    }
+
+    await blog.updateOne({ $addToSet: { like: likeUser } });
+    await blog.save();
+
+    return sendResponse(res, 200, true, "Blog liked");
+  } catch (error) {
+    sendResponse(res, 500, false, error.message);
+  }
+};
+
+const dislikeInBlog = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const likeUser = req.id;
+
+    const blog = await blogModel.findById(blogId);
+    if (!blog) {
+      sendResponse(res, 404, false, "Blog not found");
+    }
+
+    await blog.updateOne({ $pull: { like: likeUser } });
+    await blog.save();
+
+    return sendResponse(res, 200, true, "Blog disliked");
+  } catch (error) {
+    sendResponse(res, 500, false, error.message);
+  }
+};
+
+const getMyTotalBlogLikes = async (req, res) => {
+  try {
+    const userId = req.id;
+    const myBlogs = await blogModel.find({ author: userId }).select("like");
+
+    const totalLikes = myBlogs.reduce(
+      (acc, blog) => acc + (blog.like?.length || 0),
+      0,
+    );
+    return res.status(200).json({
+      success: true,
+      totalBlogs: myBlogs.length,
+      totalLikes,
+    });
+  } catch (error) {
+    sendResponse(res, 500, false, "failed to fettch total blogs like");
+  }
+};
+
+module.exports = {
+  createBlog,
+  updateBlog,
+  getOwnBlog,
+  deleteBlog,
+  getPublishBlog,
+  togglePublishedBlog,
+  likeInBlog,
+  dislikeInBlog,
+  getMyTotalBlogLikes,
+};

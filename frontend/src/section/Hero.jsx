@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
 import blog2 from "../assets/blog2.png";
+import RecentBlog from "./RecentBlog";
+import PopularAuthor from "./PopularAuthor";
+import Footer from "./Footer";
 const Hero = () => {
   return (
     <div className="h-[90vh] max-w-full mx-auto bg-gray-300 py-2">
@@ -34,6 +37,10 @@ const Hero = () => {
           <img src={blog2} className="h-[500px] w-[500px]" alt="" />
         </div>
       </div>
+
+      <RecentBlog />
+      <PopularAuthor />
+      <Footer />
     </div>
   );
 };

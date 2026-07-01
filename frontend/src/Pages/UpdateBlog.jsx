@@ -1,15 +1,18 @@
 import React, { useRef, useMemo, useState } from "react";
 import JoditEditor from "jodit-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { toast } from "sonner";
+import { setBlog } from "@/Redux/Slice/blogSlice";
 
 const UpdateBlog = () => {
+  const dispatch = useDispatch();
   const editor = useRef(null);
   const navigate = useNavigate();
   const params = useParams();
   const id = params.id;
-
+  const [publish, setpublish] = useState(false);
   const { blog } = useSelector((store) => store.blog);
 
   // নিরাপদভাবে ব্লগ খুঁজে বের করা
@@ -78,6 +81,44 @@ const UpdateBlog = () => {
 
       if (res.data.success) {
         console.log("Update successful", res);
+        navigate("dashboard/your-blog");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggPubUnpub = async () => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:5000/api/blog/togglePublishBlog/${id}`,
+        {},
+        { withCredentials: true },
+      );
+
+      if (res.data.success) {
+        setpublish(!publish);
+        toast.success(res.data.message);
+        navigate("/dashboard/your-blog");
+      } else {
+        toast.error("Failed to updaated");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteBlog = async () => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:5000/api/blog/deleteBlog/${id}`,
+        { withCredentials: true },
+      );
+
+      if (res.data.success) {
+        const updateBlogData = blog.filter((blogItem) => blogItem?._id !== id);
+        dispatch(setBlog(updateBlogData));
+        navigate("/dashboard/your-blog");
       }
     } catch (error) {
       console.log(error);
@@ -121,10 +162,18 @@ const UpdateBlog = () => {
 
           {/* Top Buttons (এখানে বাটন ২টি ফিরিয়ে আনা হয়েছে) */}
           <div className="mt-2 flex justify-end gap-3">
-            <button className="rounded-lg bg-gray-700 px-4 py-1.5 text-sm text-white hover:bg-gray-800">
-              Unpublish
+            <button
+              onClick={() =>
+                toggPubUnpub(selectBlog.isPublished ? "false" : "true")
+              }
+              className="rounded-lg bg-gray-700 px-4 py-1.5 text-sm text-white hover:bg-gray-800"
+            >
+              {selectBlog?.isPublished ? "Unpublished" : "Publish"}
             </button>
-            <button className="rounded-lg bg-red-600 px-4 py-1.5 text-sm text-white hover:bg-red-700">
+            <button
+              onClick={deleteBlog}
+              className="rounded-lg bg-red-600 px-4 py-1.5 text-sm text-white hover:bg-red-700"
+            >
               Remove
             </button>
           </div>

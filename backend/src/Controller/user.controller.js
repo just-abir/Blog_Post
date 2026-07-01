@@ -167,4 +167,25 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { userRegister, userLogin, userLogout, updateProfile };
+const getAllUser = async (req, res) => {
+  try {
+    const users = await userModel.find().select("-password");
+
+    return res.status(200).json({
+      success: true,
+      message: "User LIst fetched",
+      total: users.length,
+      users,
+    });
+  } catch (error) {
+    sendResponse(res, 500, "Faild to get All users ");
+  }
+};
+
+module.exports = {
+  userRegister,
+  userLogin,
+  userLogout,
+  updateProfile,
+  getAllUser,
+};

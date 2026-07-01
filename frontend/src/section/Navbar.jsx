@@ -90,9 +90,14 @@ const Navbar = () => {
           {/* Menubar */}
           <div>
             <ul className="flex items-center gap-6 text-xl font-semibold  dark:text-white">
-              <li>Home</li>
-              <li>Blog</li>
-              <li>About</li>
+              <li>
+                {" "}
+                <Link to="">Home</Link>{" "}
+              </li>
+              <li>
+                <Link to="/blog">Blog</Link>
+              </li>
+              <Link to="/about">About</Link>{" "}
             </ul>
           </div>
 

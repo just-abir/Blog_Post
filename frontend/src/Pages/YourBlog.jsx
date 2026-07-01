@@ -85,12 +85,12 @@ const YourBlog = () => {
               {/* Main Info Column: Holds thumbnail image and dynamic multi-line title */}
               <div className="w-full md:w-2/5 flex items-center gap-4">
                 <img
-                  src={elem.thumbnail}
+                  src={elem.thumbnail || null}
                   alt={elem.title}
                   className="w-16 h-12 md:w-20 md:h-14 object-cover rounded-lg bg-gray-100 shrink-0 shadow-sm"
                 />
                 <Link
-                  to={`/dashboard/write-blog/${elem._id}`}
+                  to={`/blog-view/${elem._id}`}
                   className="font-medium text-gray-900 line-clamp-2 hover:text-blue-600 transition-colors cursor-pointer"
                 >
                   {elem.title}
