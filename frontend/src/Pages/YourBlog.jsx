@@ -3,23 +3,21 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
 const YourBlog = () => {
   const [openMenu, setOpenMenu] = useState(null);
   const dispatch = useDispatch();
   const { blog } = useSelector((state) => state.blog);
   const navigate = useNavigate();
+
   const getOwnBlog = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/blog/getBlog", {
         withCredentials: true,
       });
-      console.log("getown1 ", res.data.data);
       if (res.data.success) {
-        console.log("getown2 ", res.data.data);
         dispatch(setBlog(res.data.data));
       }
-
-      console.log(res);
     } catch (error) {
       console.log("Error get blog", error);
     }
@@ -31,139 +29,154 @@ const YourBlog = () => {
 
   const formatBlogDate = (isoDateString) => {
     if (!isoDateString) return "";
-
     const date = new Date(isoDateString);
+    if (isNaN(date.getTime())) return "";
 
-    // 1. Get day, month name, and year
     const day = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "long" }); // Returns "July"
+    const month = date.toLocaleString("en-US", { month: "short" });
     const year = date.getFullYear();
 
-    // 2. Get time in 12-hour format (pm/am)
     let hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12 || 12;
 
-    hours = hours % 12;
-    hours = hours ? hours : 12; // The hour '0' should be '12'
-
-    // 3. Combine into the exact format: 3/July/2023 at 5:40 pm
-    return `${day}/${month}/${year} at ${hours}:${minutes} ${ampm}`;
+    return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
   };
 
   const deleteBlog = async (id) => {
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `http://localhost:5000/api/blog/deleteBlog/${id}`,
         { withCredentials: true },
       );
       getOwnBlog();
     } catch (error) {
-      console.log(error);
+      console.log("Delete blog error:", error);
     }
   };
+
   return (
-    <div className="w-full h-[calc(100vh-80px)] p-6 ">
-      <div className="bg-white rounded-2xl shadow-md p-6 h-full flex flex-col">
-        {/* Catalog Table Header - Visible only on medium screens and larger */}
-        {/* Column Width breakdown: Title (40%), Category (25%), Date (20%), Action (15%) */}
-        <div className="hidden md:flex items-center justify-between px-6 py-4 bg-gray-50 border-b border-gray-100 text-sm font-semibold text-gray-600">
-          <div className="w-2/5">Title</div>
-          <div className="w-1/4">Category</div>
-          <div className="w-1/5">Date</div>
-          <div className="w-[15%] text-right">Action</div>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto w-full">
+      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col transition-colors duration-200">
+        <div className="p-5 sm:p-6 border-b border-gray-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Your Published & Draft Articles
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">
+              Manage, edit, or delete all your articles from one place.
+            </p>
+          </div>
+          <Link
+            to="/dashboard/create-blog"
+            className="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg transition-colors whitespace-nowrap"
+          >
+            + Create New Blog
+          </Link>
         </div>
 
-        {/* Catalog Data Rows list wrapper */}
-        <div className="flex-1 overflow-y-auto divide-y divide-gray-100">
-          {blog.map((elem) => (
-            <div
-              key={elem._id}
-              // Responsive switches: Stacks into vertical card slots on mobile, shifts to full row layout on desktop
-              className="flex flex-col md:flex-row md:items-center justify-between px-6 py-4 hover:bg-gray-50/50 transition-colors gap-4 md:gap-0"
-            >
-              {/* Main Info Column: Holds thumbnail image and dynamic multi-line title */}
-              <div className="w-full md:w-2/5 flex items-center gap-4">
-                <img
-                  src={elem.thumbnail || null}
-                  alt={elem.title}
-                  className="w-16 h-12 md:w-20 md:h-14 object-cover rounded-lg bg-gray-100 shrink-0 shadow-sm"
-                />
-                <Link
-                  to={`/blog-view/${elem._id}`}
-                  className="font-medium text-gray-900 line-clamp-2 hover:text-blue-600 transition-colors cursor-pointer"
-                >
-                  {elem.title}
-                </Link>
-              </div>
+        {/* Catalog Table Header */}
+        <div className="hidden md:flex items-center justify-between px-6 py-3.5 bg-gray-50 dark:bg-slate-800/60 border-b border-gray-200 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-slate-400">
+          <div className="w-2/5">Article</div>
+          <div className="w-1/4">Category</div>
+          <div className="w-1/5">Date</div>
+          <div className="w-[15%] text-right">Actions</div>
+        </div>
 
-              {/* Category Column: Pill badge layout with inline fallback label for mobile views */}
-              <div className="w-full md:w-1/4 flex md:block items-center justify-between">
-                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase">
-                  Category:
-                </span>
-                <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 max-w-full truncate">
-                  {elem.category}
-                </span>
-              </div>
-
-              {/* Date Column: Text layout with inline fallback label for mobile views */}
-              <div className="w-full md:w-1/5 flex md:block items-center justify-between text-sm text-gray-500">
-                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase">
-                  Date:
-                </span>
-                <span>{formatBlogDate(elem.createdAt)}</span>
-              </div>
-
-              {/* Action Column: Three-dot trigger with clean alignment mapping */}
-              <div className="relative w-full md:w-[15%] flex md:block items-center justify-between md:text-right">
-                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase">
-                  Action:
-                </span>
-
-                <button
-                  onClick={() =>
-                    setOpenMenu(openMenu === elem._id ? null : elem._id)
-                  }
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
+        {/* Catalog Data Rows list */}
+        <div className="divide-y divide-gray-100 dark:divide-slate-800/80">
+          {blog && blog.length > 0 ? (
+            blog.map((elem) => (
+              <div
+                key={elem._id}
+                className="flex flex-col md:flex-row md:items-center justify-between px-6 py-4 hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors gap-3 md:gap-0"
+              >
+                {/* Main Info Column */}
+                <div className="w-full md:w-2/5 flex items-center gap-3 sm:gap-4">
+                  <img
+                    src={elem.thumbnail || "https://placehold.co/100x70?text=Blog"}
+                    alt={elem.title}
+                    className="w-14 h-11 sm:w-16 sm:h-12 object-cover rounded-lg bg-gray-100 dark:bg-slate-800 shrink-0 border border-gray-200 dark:border-slate-700"
+                  />
+                  <Link
+                    to={`/blog-view/${elem._id}`}
+                    className="font-bold text-sm text-gray-900 dark:text-white line-clamp-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
-                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2 .9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                  </svg>
-                </button>
+                    {elem.title}
+                  </Link>
+                </div>
 
-                {openMenu === elem._id && (
-                  <div className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-50">
-                    <button
-                      onClick={() => {
-                        navigate(`/dashboard/write-blog/${elem._id}`);
-                        console.log("Edit", elem._id);
-                        setOpenMenu(null);
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    >
-                      ✏️ Edit
-                    </button>
+                {/* Category Column */}
+                <div className="w-full md:w-1/4 flex md:block items-center justify-between">
+                  <span className="md:hidden text-xs font-bold text-gray-500 dark:text-slate-400">
+                    Category:
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
+                    {elem.category || "General"}
+                  </span>
+                </div>
 
-                    <button
-                      onClick={() => {
-                        deleteBlog(elem._id);
-                        console.log("Delete", elem._id);
-                        setOpenMenu(null);
-                      }}
-                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                {/* Date Column */}
+                <div className="w-full md:w-1/5 flex md:block items-center justify-between text-xs sm:text-sm text-gray-500 dark:text-slate-400">
+                  <span className="md:hidden text-xs font-bold text-gray-500 dark:text-slate-400">
+                    Date:
+                  </span>
+                  <span>{formatBlogDate(elem.createdAt)}</span>
+                </div>
+
+                {/* Action Column */}
+                <div className="relative w-full md:w-[15%] flex md:block items-center justify-between md:text-right">
+                  <span className="md:hidden text-xs font-bold text-gray-500 dark:text-slate-400">
+                    Action:
+                  </span>
+
+                  <button
+                    onClick={() =>
+                      setOpenMenu(openMenu === elem._id ? null : elem._id)
+                    }
+                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg text-gray-600 dark:text-slate-300 transition-colors"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      🗑 Delete
-                    </button>
-                  </div>
-                )}
+                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2 .9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                    </svg>
+                  </button>
+
+                  {openMenu === elem._id && (
+                    <div className="absolute right-0 mt-2 w-36 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg z-50 py-1">
+                      <button
+                        onClick={() => {
+                          navigate(`/dashboard/write-blog/${elem._id}`);
+                          setOpenMenu(null);
+                        }}
+                        className="w-full text-left px-4 py-2 text-xs sm:text-sm font-bold text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                      >
+                        ✏️ Edit
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          deleteBlog(elem._id);
+                          setOpenMenu(null);
+                        }}
+                        className="w-full text-left px-4 py-2 text-xs sm:text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                      >
+                        🗑 Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="py-12 text-center text-gray-500 dark:text-slate-400 font-bold">
+              You haven't created any blogs yet.
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
@@ -171,3 +184,4 @@ const YourBlog = () => {
 };
 
 export default YourBlog;
+

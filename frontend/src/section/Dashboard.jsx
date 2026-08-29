@@ -4,14 +4,14 @@ import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   return (
-    <div className="flex h-[94vh] mt-[6vh]">
+    <div className="pt-16 min-h-screen flex flex-col md:flex-row bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100 transition-colors duration-200">
       <Sidebar />
-
-      <div className="flex-1 ">
+      <main className="flex-1 min-w-0 overflow-y-auto">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 };
 
 export default Dashboard;
+

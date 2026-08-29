@@ -16,9 +16,9 @@ import Blog from "./section/Blog";
 import About from "./section/About";
 const App = () => {
   return (
-    <div className="bg-emerald-900">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100 flex flex-col transition-colors duration-200">
       <Navbar />
-      <Toaster position="top-left" />
+      <Toaster position="top-left" richColors />
       <Routes>
         <Route path="/" element={<Hero />} />
         <Route path="/signup" element={<Signup />} />

@@ -12,15 +12,14 @@ const UpdateBlog = () => {
   const navigate = useNavigate();
   const params = useParams();
   const id = params.id;
-  const [publish, setpublish] = useState(false);
   const { blog } = useSelector((store) => store.blog);
 
-  // নিরাপদভাবে ব্লগ খুঁজে বের করা
+  // Find selected blog
   const selectBlog = blog ? blog.find((b) => b._id === id) : null;
+  const [publish, setpublish] = useState(selectBlog?.isPublished || false);
 
-  // স্টেট ইনিশিয়ালাইজেশন
+  // Form states
   const [content, setcontent] = useState(selectBlog?.description || "");
-
   const [blogData, setBlogData] = useState({
     title: selectBlog?.title || "",
     subtitle: selectBlog?.subtitle || "",
@@ -63,7 +62,7 @@ const UpdateBlog = () => {
     formData.append("description", content);
     formData.append("category", blogData.category);
 
-    if (blogData.thumbnail) {
+    if (blogData.thumbnail && typeof blogData.thumbnail !== "string") {
       formData.append("file", blogData.thumbnail);
     }
 
@@ -80,11 +79,12 @@ const UpdateBlog = () => {
       );
 
       if (res.data.success) {
-        console.log("Update successful", res);
-        navigate("dashboard/your-blog");
+        toast.success("Blog updated successfully");
+        navigate("/dashboard/your-blog");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Update error:", error);
+      toast.error("Failed to update blog");
     }
   };
 
@@ -98,13 +98,14 @@ const UpdateBlog = () => {
 
       if (res.data.success) {
         setpublish(!publish);
-        toast.success(res.data.message);
+        toast.success(res.data.message || "Status updated!");
         navigate("/dashboard/your-blog");
       } else {
-        toast.error("Failed to updaated");
+        toast.error("Failed to update status");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Publish toggle error:", error);
+      toast.error("Error toggling publish state");
     }
   };
 
@@ -118,10 +119,12 @@ const UpdateBlog = () => {
       if (res.data.success) {
         const updateBlogData = blog.filter((blogItem) => blogItem?._id !== id);
         dispatch(setBlog(updateBlogData));
+        toast.success("Blog deleted successfully");
         navigate("/dashboard/your-blog");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Delete error:", error);
+      toast.error("Failed to delete blog");
     }
   };
 
@@ -129,62 +132,67 @@ const UpdateBlog = () => {
     () => ({
       readonly: false,
       placeholder: "Write your blog content here...",
-      height: 250,
+      height: 300,
     }),
     [],
   );
 
   if (!selectBlog) {
     return (
-      <div className="p-6 text-center">
+      <div className="p-8 text-center text-gray-500 dark:text-slate-400 font-bold">
         Loading blog data or blog not found...
       </div>
     );
   }
 
   return (
-    <div className="w-full h-[calc(100vh-90px)] p-6 overflow-hidden">
-      <div className="bg-white rounded-2xl shadow-md p-6 max-h-full flex flex-col">
-        {/* Header Section (ফিক্সড থাকবে) */}
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto w-full">
+      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl shadow-sm p-6 sm:p-8 flex flex-col transition-colors duration-200">
+        {/* Header Section */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Write Your Blog</h1>
-          <p className="mt-1 text-gray-500 text-sm">
-            Complete your blog details and publish it when you're ready.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+                Edit & Write Your Blog
+              </h1>
+              <p className="mt-1 text-xs sm:text-sm text-gray-500 dark:text-slate-400">
+                Complete your blog details and publish it when you're ready.
+              </p>
+            </div>
 
-          {/* Alert */}
-          <div className="mt-2 rounded-xl border border-yellow-300 bg-yellow-50 px-4 py-2">
-            <p className="text-xs text-yellow-800">
-              ⚠️ Your blog is currently unpublished. Save your changes before
-              publishing.
-            </p>
+            {/* Top Action Buttons */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={toggPubUnpub}
+                className="rounded-lg bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white transition-colors"
+              >
+                {selectBlog?.isPublished ? "Unpublish" : "Publish"}
+              </button>
+              <button
+                onClick={deleteBlog}
+                className="rounded-lg bg-red-600 hover:bg-red-700 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white transition-colors"
+              >
+                Remove
+              </button>
+            </div>
           </div>
 
-          {/* Top Buttons (এখানে বাটন ২টি ফিরিয়ে আনা হয়েছে) */}
-          <div className="mt-2 flex justify-end gap-3">
-            <button
-              onClick={() =>
-                toggPubUnpub(selectBlog.isPublished ? "false" : "true")
-              }
-              className="rounded-lg bg-gray-700 px-4 py-1.5 text-sm text-white hover:bg-gray-800"
-            >
-              {selectBlog?.isPublished ? "Unpublished" : "Publish"}
-            </button>
-            <button
-              onClick={deleteBlog}
-              className="rounded-lg bg-red-600 px-4 py-1.5 text-sm text-white hover:bg-red-700"
-            >
-              Remove
-            </button>
+          {/* Alert */}
+          <div className="mt-4 rounded-xl border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 px-4 py-2.5">
+            <p className="text-xs sm:text-sm font-bold text-amber-800 dark:text-amber-300">
+              {selectBlog?.isPublished
+                ? "✓ This blog is currently Published and visible to the public."
+                : "⚠️ Your blog is currently unpublished. Save your changes and click Publish when ready."}
+            </p>
           </div>
         </div>
 
-        {/* Scrollable Form Fields Section */}
-        <div className="flex-1 overflow-y-auto pr-2 mt-4 space-y-4 thin-scrollbar">
+        {/* Form Fields Section */}
+        <div className="mt-6 space-y-5">
           {/* Title and Subtitle */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-1.5 text-sm font-bold text-gray-700 dark:text-slate-300">
                 Blog Title
               </label>
               <input
@@ -193,11 +201,11 @@ const UpdateBlog = () => {
                 onChange={handleChange}
                 type="text"
                 placeholder="Enter blog title"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 outline-none"
+                className="w-full rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-1.5 text-sm font-bold text-gray-700 dark:text-slate-300">
                 Subtitle
               </label>
               <input
@@ -206,17 +214,17 @@ const UpdateBlog = () => {
                 onChange={handleChange}
                 type="text"
                 placeholder="Enter subtitle"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 outline-none"
+                className="w-full rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Description
+            <label className="block mb-1.5 text-sm font-bold text-gray-700 dark:text-slate-300">
+              Content & Description
             </label>
-            <div className="border border-gray-300 rounded-lg overflow-hidden">
+            <div className="border border-gray-300 dark:border-slate-700 rounded-xl overflow-hidden bg-white text-black">
               <JoditEditor
                 ref={editor}
                 value={content}
@@ -229,14 +237,14 @@ const UpdateBlog = () => {
           {/* Category and Thumbnail */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-1.5 text-sm font-bold text-gray-700 dark:text-slate-300">
                 Category
               </label>
               <select
                 name="category"
                 value={blogData.category}
                 onChange={selecCategory}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none focus:border-blue-500"
+                className="w-full rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="">Select a category</option>
                 <option value="AI">AI</option>
@@ -245,24 +253,25 @@ const UpdateBlog = () => {
                 <option value="React">Reactjs</option>
                 <option value="Nodejs">Node js</option>
                 <option value="Python">Python</option>
+                <option value="Digital Marketing">Digital Marketing</option>
               </select>
             </div>
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-1.5 text-sm font-bold text-gray-700 dark:text-slate-300">
                 Thumbnail Image
               </label>
               <input
                 onChange={selectThumb}
                 type="file"
                 accept="image/*"
-                className="block w-full text-sm rounded-lg border border-gray-300 p-[7px] outline-none focus:border-blue-500"
+                className="block w-full text-sm rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 p-2 outline-none focus:ring-2 focus:ring-emerald-500"
               />
               {prevThumb && (
-                <div className="mt-2">
+                <div className="mt-3">
                   <img
                     src={prevThumb}
                     alt="Preview"
-                    className="h-20 w-32 object-cover rounded-lg border"
+                    className="h-24 w-40 object-cover rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm"
                   />
                 </div>
               )}
@@ -270,19 +279,19 @@ const UpdateBlog = () => {
           </div>
         </div>
 
-        {/* Bottom Buttons (ফিক্সড থাকবে) */}
-        <div className="mt-4 pt-3 border-t border-gray-100 flex justify-end gap-4">
+        {/* Bottom Buttons */}
+        <div className="mt-8 pt-5 border-t border-gray-200 dark:border-slate-800 flex justify-end gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="rounded-lg border border-gray-300 px-5 py-2 text-sm hover:bg-gray-100"
+            className="rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-5 py-2.5 text-sm font-bold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
           >
             Back
           </button>
           <button
             onClick={updateBlogHandle}
-            className="rounded-lg bg-blue-600 px-5 py-2 text-sm text-white hover:bg-blue-700"
+            className="rounded-lg bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors"
           >
-            Save
+            Save Changes
           </button>
         </div>
       </div>
@@ -291,3 +300,4 @@ const UpdateBlog = () => {
 };
 
 export default UpdateBlog;
+

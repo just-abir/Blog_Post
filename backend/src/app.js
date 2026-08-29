@@ -1,6 +1,7 @@
 const express = require("express");
 const router = require("./Routes/user.routes");
 const blogRouter = require("./Routes/blog.routes");
+const commentRouter = require("./Routes/comment.routes");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
@@ -17,5 +18,6 @@ app.use(
 );
 app.use("/api/user", router);
 app.use("/api/blog", blogRouter);
+app.use("/api/comment", commentRouter);
 
 module.exports = app;

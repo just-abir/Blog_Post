@@ -1,60 +1,77 @@
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const RecentBlog = () => {
   const navigate = useNavigate();
   const { blog } = useSelector((store) => store.blog);
 
   return (
-    <div className="pt-20 min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-5">
+    <section className="py-16 sm:py-20 bg-gray-50 dark:bg-slate-950 transition-colors duration-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <h1 className="text-4xl font-bold text-center mb-10">Recent Blogs</h1>
+        <div className="text-center mb-10 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
+            Recent Blogs
+          </h2>
+          <p className="mt-3 text-base text-gray-600 dark:text-slate-400 max-w-xl mx-auto">
+            Discover our latest published articles written by knowledgeable community members.
+          </p>
+        </div>
 
-        <div className="grid lg:grid-cols-3 gap-10">
-          {/* Left Side */}
-          <div className="lg:col-span-2 space-y-8">
-            {blog?.slice(0, 5).map((item) => (
-              <div
-                key={item._id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition"
-              >
-                <img
-                  src={
-                    item.thumbnail ||
-                    "https://placehold.co/800x500?text=No+Image"
-                  }
-                  alt={item.title}
-                  className="w-full h-64 object-cover"
-                />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10">
+          {/* Left Side - Blog Posts */}
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8">
+            {blog && blog.length > 0 ? (
+              blog.slice(0, 5).map((item) => (
+                <article
+                  key={item._id}
+                  className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden"
+                >
+                  <img
+                    src={
+                      item.thumbnail ||
+                      "https://placehold.co/800x500?text=No+Image"
+                    }
+                    alt={item.title}
+                    className="w-full h-56 sm:h-64 object-cover"
+                  />
 
-                <div className="p-6">
-                  <span className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm mb-3">
-                    {item.category}
-                  </span>
+                  <div className="p-6 sm:p-7">
+                    <span className="inline-block bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold mb-3">
+                      {item.category || "General"}
+                    </span>
 
-                  <h2 className="text-2xl font-bold mb-3">{item.title}</h2>
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                      <Link to={`/blog-view/${item._id}`}>{item.title}</Link>
+                    </h3>
 
-                  <p className="text-gray-500 mb-5 line-clamp-3">
-                    {item.subtitle || "No subtitle available."}
-                  </p>
+                    <p className="text-gray-600 dark:text-slate-400 mb-5 line-clamp-3 text-sm sm:text-base leading-relaxed">
+                      {item.subtitle || "No subtitle available."}
+                    </p>
 
-                  <button
-                    onClick={() => navigate(`/blog/${item._id}`)}
-                    className="text-blue-600 font-semibold hover:text-blue-800"
-                  >
-                    Read More →
-                  </button>
-                </div>
+                    <button
+                      onClick={() => navigate(`/blog-view/${item._id}`)}
+                      className="text-emerald-600 dark:text-emerald-400 font-bold text-sm sm:text-base hover:underline flex items-center gap-1 transition-all"
+                    >
+                      Read More →
+                    </button>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl p-8 text-center text-gray-500 dark:text-slate-400 font-bold">
+                No recent blogs found.
               </div>
-            ))}
+            )}
           </div>
 
           {/* Right Sidebar */}
-          <div className="space-y-8">
+          <aside className="space-y-6 sm:space-y-8">
             {/* Popular Categories */}
-            <div className="bg-white rounded-xl shadow p-6">
-              <h2 className="text-xl font-bold mb-4">Popular Categories</h2>
+            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl shadow-sm p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Popular Categories
+              </h3>
 
               <div className="flex flex-wrap gap-2">
                 {[
@@ -68,7 +85,7 @@ const RecentBlog = () => {
                 ].map((category) => (
                   <span
                     key={category}
-                    className="bg-gray-100 px-3 py-2 rounded-full text-sm hover:bg-blue-100 cursor-pointer"
+                    className="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold hover:bg-emerald-100 dark:hover:bg-emerald-950/50 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer"
                   >
                     {category}
                   </span>
@@ -77,59 +94,61 @@ const RecentBlog = () => {
             </div>
 
             {/* Newsletter */}
-            <div className="bg-white rounded-xl shadow p-6">
-              <h2 className="text-xl font-bold mb-2">
+            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl shadow-sm p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
                 Subscribe to Newsletter
-              </h2>
+              </h3>
 
-              <p className="text-gray-500 text-sm mb-4">
-                Get the latest blogs directly in your inbox.
+              <p className="text-gray-600 dark:text-slate-400 text-xs sm:text-sm mb-4 leading-relaxed">
+                Get the latest blogs directly delivered to your inbox.
               </p>
 
-              <div className="flex gap-2">
+              <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="email"
                   placeholder="Email Address"
-                  className="flex-1 border rounded-lg px-3 py-2 outline-none"
+                  className="flex-1 border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
                 />
 
-                <button className="bg-blue-600 text-white px-4 rounded-lg hover:bg-blue-700">
+                <button
+                  type="submit"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors whitespace-nowrap"
+                >
                   Subscribe
                 </button>
-              </div>
+              </form>
             </div>
 
             {/* Suggested Blogs */}
-            <div className="bg-white rounded-xl shadow p-6">
-              <h2 className="text-xl font-bold mb-4">Suggested Blogs</h2>
+            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl shadow-sm p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Suggested Topics
+              </h3>
 
               <div className="space-y-3">
-                <p className="cursor-pointer hover:text-blue-600">
-                  Top 10 Master React
-                </p>
-
-                <p className="cursor-pointer hover:text-blue-600">
-                  Understand Node.js
-                </p>
-
-                <p className="cursor-pointer hover:text-blue-600">
-                  Complete JavaScript Guide
-                </p>
-
-                <p className="cursor-pointer hover:text-blue-600">
-                  MongoDB Aggregation
-                </p>
-
-                <p className="cursor-pointer hover:text-blue-600">
-                  Next.js Full Course
-                </p>
+                {[
+                  "Top 10 Master React Patterns",
+                  "Understand Node.js Event Loop",
+                  "Complete Modern JavaScript Guide",
+                  "MongoDB Aggregation Pipelines",
+                  "Next.js Full Course Walkthrough",
+                ].map((title, idx) => (
+                  <p
+                    key={idx}
+                    className="font-bold text-sm text-gray-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer"
+                  >
+                    {title}
+                  </p>
+                ))}
               </div>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
 export default RecentBlog;
+
+

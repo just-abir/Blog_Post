@@ -6,105 +6,117 @@ import {
   FaPhoneAlt,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white mt-20">
-      <div className="max-w-7xl mx-auto px-6 py-14">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+    <footer className="bg-slate-900 dark:bg-slate-950 text-slate-100 border-t border-slate-800 transition-colors duration-200 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
           {/* ================= First Column ================= */}
           <div>
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3">
               <img
-                src="/logo.png"
-                alt="Logo"
-                className="w-12 h-12 rounded-full"
+                src={logo}
+                alt="FLOG Logo"
+                className="w-10 h-10 object-contain"
               />
+              <span className="text-2xl font-bold tracking-tight text-white">FLOG</span>
+            </Link>
 
-              <h2 className="text-2xl font-bold">BlogSphere</h2>
-            </div>
+            <p className="mt-4 text-sm text-slate-300 leading-relaxed">
+              Empowering writers and readers around the world to share, discover, and learn latest tech insights.
+            </p>
 
-            <div className="mt-6 space-y-3 text-gray-300">
+            <div className="mt-6 space-y-2.5 text-sm text-slate-300">
               <div className="flex items-center gap-3">
-                <FaMapMarkerAlt />
+                <FaMapMarkerAlt className="text-emerald-400 shrink-0" />
                 <span>Dhaka, Bangladesh</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <FaPhoneAlt />
+                <FaPhoneAlt className="text-emerald-400 shrink-0" />
                 <span>+880 1700-000000</span>
               </div>
             </div>
           </div>
 
           {/* ================= Second Column ================= */}
-
           <div>
-            <h2 className="text-xl font-semibold mb-5">Quick Links</h2>
+            <h3 className="text-lg font-bold text-white mb-4">Quick Links</h3>
 
-            <div className="flex flex-col gap-3 text-gray-300">
-              <Link to="/" className="hover:text-blue-400">
+            <div className="flex flex-col gap-2.5 text-sm text-slate-300">
+              <Link to="/" className="font-bold hover:text-emerald-400 transition-colors">
                 Home
               </Link>
-
-              <Link to="/blog" className="hover:text-blue-400">
-                Blogs
+              <Link to="/blog" className="font-bold hover:text-emerald-400 transition-colors">
+                All Blogs
               </Link>
-
-              <Link to="/about" className="hover:text-blue-400">
+              <Link to="/about" className="font-bold hover:text-emerald-400 transition-colors">
                 About Us
-              </Link>
-
-              <Link to="/faq" className="hover:text-blue-400">
-                FAQs
               </Link>
             </div>
 
-            <h2 className="text-xl font-semibold mt-8 mb-4">Follow Us</h2>
+            <h3 className="text-lg font-bold text-white mt-6 mb-3">Follow Us</h3>
 
-            <div className="flex gap-5 text-2xl">
-              <a href="#">
-                <FaFacebook className="hover:text-blue-500 transition" />
+            <div className="flex gap-4 text-xl">
+              <a
+                href="#"
+                aria-label="Facebook"
+                className="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-emerald-400 hover:bg-slate-700 transition-colors"
+              >
+                <FaFacebook />
               </a>
 
-              <a href="#">
-                <FaGithub className="hover:text-gray-400 transition" />
+              <a
+                href="#"
+                aria-label="GitHub"
+                className="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+              >
+                <FaGithub />
               </a>
 
-              <a href="#">
-                <FaInstagram className="hover:text-pink-500 transition" />
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-pink-400 hover:bg-slate-700 transition-colors"
+              >
+                <FaInstagram />
               </a>
             </div>
           </div>
 
           {/* ================= Third Column ================= */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <h3 className="text-lg font-bold text-white mb-2">Subscribe Newsletter</h3>
 
-          <div>
-            <h2 className="text-xl font-semibold">Subscribe Newsletter</h2>
-
-            <p className="text-gray-300 mt-4 leading-7">
-              Stay updated with our latest blogs, tutorials and programming
-              tips. Join our newsletter today.
+            <p className="text-slate-300 text-sm mt-2 leading-relaxed">
+              Stay updated with our latest blogs, tutorials, and programming tips.
             </p>
 
-            <div className="mt-6 flex">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="mt-5 flex flex-col sm:flex-row gap-2"
+            >
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3    bg-white rounded-l-lg outline-none text-black"
+                className="flex-1 px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-lg outline-none text-white text-sm focus:ring-2 focus:ring-emerald-500"
               />
 
-              <button className="bg-blue-600 px-6 rounded-r-lg hover:bg-blue-700 transition">
+              <button
+                type="submit"
+                className="bg-emerald-600 hover:bg-emerald-700 px-5 py-2.5 rounded-lg text-white font-bold text-sm transition-colors whitespace-nowrap"
+              >
                 Subscribe
               </button>
-            </div>
+            </form>
           </div>
         </div>
 
         {/* Bottom */}
-
-        <div className="border-t border-gray-700 mt-12 pt-6 text-center text-gray-400">
-          © {new Date().getFullYear()} BlogSphere. All Rights Reserved.
+        <div className="border-t border-slate-800 mt-10 pt-6 text-center text-xs sm:text-sm text-slate-400">
+          © {new Date().getFullYear()} FLOG. All Rights Reserved.
         </div>
       </div>
     </footer>
@@ -112,3 +124,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
