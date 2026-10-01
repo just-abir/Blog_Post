@@ -1,5 +1,5 @@
 import Sidebar from "@/Pages/Sidebar";
-import React from "react";
+
 import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
@@ -14,4 +14,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

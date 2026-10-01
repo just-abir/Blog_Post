@@ -1,15 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import {
-  ArrowRight,
-  Bookmark,
-  Heart,
-  MessageCircle,
-  MoreHorizontal,
-  Send,
-  Share2,
-} from "lucide-react";
+import { ArrowRight, Heart, MessageCircle, Send, Share2 } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 import { setBlog } from "@/Redux/Slice/blogSlice";
@@ -86,7 +78,7 @@ const BlogView = () => {
         dispatch(setBlog(updatedBlogData));
       }
     } catch (error) {
-      console.log("Error liking post:", error);
+      console.log(error);
     }
   };
 
@@ -113,11 +105,17 @@ const BlogView = () => {
           <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl shadow-sm p-6 sm:p-10 transition-colors">
             {/* ================= Breadcrumb ================= */}
             <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-slate-400 mb-6 font-bold flex-wrap">
-              <Link to="/" className="hover:text-emerald-600 dark:hover:text-emerald-400">
+              <Link
+                to="/"
+                className="hover:text-emerald-600 dark:hover:text-emerald-400"
+              >
                 Home
               </Link>
               <ArrowRight size={14} />
-              <Link to="/blog" className="hover:text-emerald-600 dark:hover:text-emerald-400">
+              <Link
+                to="/blog"
+                className="hover:text-emerald-600 dark:hover:text-emerald-400"
+              >
                 Blog
               </Link>
               <ArrowRight size={14} />
@@ -151,7 +149,9 @@ const BlogView = () => {
 
                 <div>
                   <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">
-                    {selectBlog.author?.firstName || selectBlog.author?.name || "Anonymous"}{" "}
+                    {selectBlog.author?.firstName ||
+                      selectBlog.author?.name ||
+                      "Anonymous"}{" "}
                     {selectBlog.author?.lastName || ""}
                   </h3>
 
@@ -206,7 +206,9 @@ const BlogView = () => {
                 >
                   <Heart
                     size={20}
-                    className={liked ? "fill-red-500 text-red-500" : "text-gray-500"}
+                    className={
+                      liked ? "fill-red-500 text-red-500" : "text-gray-500"
+                    }
                   />
                   <span>{blogLike}</span>
                 </button>
@@ -274,7 +276,9 @@ const BlogView = () => {
                             </h4>
                             <span className="text-xs text-gray-500 dark:text-slate-400">
                               {comment.createdAt
-                                ? new Date(comment.createdAt).toLocaleDateString("en-GB")
+                                ? new Date(
+                                    comment.createdAt,
+                                  ).toLocaleDateString("en-GB")
                                 : ""}
                             </span>
                           </div>
@@ -302,4 +306,3 @@ const BlogView = () => {
 };
 
 export default BlogView;
-

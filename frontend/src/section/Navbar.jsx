@@ -49,7 +49,7 @@ const Navbar = () => {
       const response = await axios.post(
         "http://localhost:5000/api/user/logout",
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (response.data.success) {
         dispatch(setUser(null));
@@ -57,7 +57,7 @@ const Navbar = () => {
         navigate("/");
       }
     } catch (error) {
-      console.log("logout error", error);
+      console.log(error);
       toast.error("Logout failed");
     }
   };
@@ -141,7 +141,9 @@ const Navbar = () => {
                           alt={user.userName || "User"}
                         />
                         <AvatarFallback className="font-bold bg-emerald-600 text-white text-xs">
-                          {user.userName ? user.userName.slice(0, 2).toUpperCase() : "US"}
+                          {user.userName
+                            ? user.userName.slice(0, 2).toUpperCase()
+                            : "US"}
                         </AvatarFallback>
                       </Avatar>
                     </button>
@@ -319,4 +321,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

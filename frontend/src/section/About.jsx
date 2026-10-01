@@ -1,4 +1,3 @@
-import React from "react";
 import Footer from "./Footer";
 
 const About = () => {
@@ -43,19 +42,22 @@ const About = () => {
 
               <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-4 text-sm sm:text-base">
                 Every article is written to educate, inspire, and help readers
-                improve their skills. Whether you're a beginner or an experienced
-                developer, you'll always find something valuable here.
+                improve their skills. Whether you're a beginner or an
+                experienced developer, you'll always find something valuable
+                here.
               </p>
 
               <p className="text-gray-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-                We believe learning never stops. Every blog we publish is another
-                step toward building a stronger community of curious minds.
+                We believe learning never stops. Every blog we publish is
+                another step toward building a stronger community of curious
+                minds.
               </p>
 
               {/* Quote */}
               <div className="mt-8 border-l-4 border-emerald-600 dark:border-emerald-500 pl-4 py-1 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-r-lg">
                 <p className="italic text-base sm:text-lg font-bold text-gray-800 dark:text-slate-200">
-                  "The more we share knowledge, the brighter the future becomes."
+                  "The more we share knowledge, the brighter the future
+                  becomes."
                 </p>
               </div>
             </div>
@@ -68,4 +70,3 @@ const About = () => {
 };
 
 export default About;
-

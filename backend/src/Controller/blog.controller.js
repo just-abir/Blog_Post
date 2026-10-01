@@ -18,11 +18,11 @@ const createBlog = async (req, res) => {
       author: req.id,
     });
 
-    console.log("hi", blog);
+  
 
     return sendResponse(res, 201, true, "Blog created Successfully", blog);
   } catch (error) {
-    console.log("Eror", error);
+   
     return sendResponse(res, 500, false, error.message);
   }
 };
@@ -60,7 +60,6 @@ const updateBlog = async (req, res) => {
 
     sendResponse(res, 200, true, "Blog updated successfully", updateData);
   } catch (error) {
-    console.log("error upade ", error.message);
     sendResponse(res, 500, false, error.message);
   }
 };

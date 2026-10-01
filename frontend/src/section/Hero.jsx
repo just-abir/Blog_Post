@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
+
 import blog2 from "../assets/blog2.png";
 import RecentBlog from "./RecentBlog";
 import PopularAuthor from "./PopularAuthor";
@@ -23,8 +23,8 @@ const Hero = () => {
               </h1>
 
               <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Stay ahead with in-depth articles, tutorials, and insights on web
-                development, digital marketing, and tech innovations.
+                Stay ahead with in-depth articles, tutorials, and insights on
+                web development, digital marketing, and tech innovations.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4">
@@ -65,4 +65,3 @@ const Hero = () => {
 };
 
 export default Hero;
-

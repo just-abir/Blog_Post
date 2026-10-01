@@ -1,10 +1,11 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const BlogCard = ({ blog }) => {
   const navigate = useNavigate();
   const date = new Date(blog?.createdAt || null);
-  const formatDate = !isNaN(date.getTime()) ? date.toLocaleDateString("en-GB") : "";
+  const formatDate = !isNaN(date.getTime())
+    ? date.toLocaleDateString("en-GB")
+    : "";
 
   return (
     <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
@@ -48,7 +49,9 @@ const BlogCard = ({ blog }) => {
             {blog?.author?.lastName || ""}
           </p>
           {formatDate && (
-            <p className="text-xs text-gray-500 dark:text-slate-400">{formatDate}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">
+              {formatDate}
+            </p>
           )}
         </div>
 
@@ -64,4 +67,3 @@ const BlogCard = ({ blog }) => {
 };
 
 export default BlogCard;
-

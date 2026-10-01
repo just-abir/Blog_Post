@@ -1,4 +1,3 @@
-import React from "react";
 import { MessageSquare } from "lucide-react";
 
 const Comments = () => {
@@ -25,7 +24,8 @@ const Comments = () => {
             No Recent Comments
           </h3>
           <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
-            When readers comment on your blogs, their thoughts and replies will appear here.
+            When readers comment on your blogs, their thoughts and replies will
+            appear here.
           </p>
         </div>
       </div>
@@ -34,4 +34,3 @@ const Comments = () => {
 };
 
 export default Comments;
-

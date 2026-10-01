@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "./section/Navbar";
 import Hero from "./section/Hero";
 import { Routes, Route } from "react-router-dom";

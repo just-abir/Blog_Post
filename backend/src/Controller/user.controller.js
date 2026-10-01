@@ -88,8 +88,6 @@ const userLogout = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    console.log("Body:", req.body);
-    console.log("File:", req.file);
     const userId = req.id;
     const {
       firstName,
@@ -115,7 +113,7 @@ const updateProfile = async (req, res) => {
 
       cloudResponse = await cloudinary.uploader.upload(fileUri.content);
     }
-    console.log(cloudResponse);
+    // console.log(cloudResponse);
     // Find User
     const user = await userModel.findById(userId).select("-password");
 
@@ -156,10 +154,6 @@ const updateProfile = async (req, res) => {
     }
 
     await user.save();
-
-    console.log(user);
-    console.log(user.occupation);
-    console.log(user.socialLinks.facebook);
 
     return sendResponse(res, 200, true, "Profile updated successfully", user);
   } catch (error) {

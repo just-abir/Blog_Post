@@ -33,7 +33,6 @@ const CreateBlog = () => {
         toast.success(res.data.message || "Blog created successfully!");
       }
     } catch (error) {
-      console.log("Create blog error:", error);
       toast.error(error.response?.data?.message || "Failed to create blog");
     } finally {
       dispatch(setLoading(false));
@@ -105,4 +104,3 @@ const CreateBlog = () => {
 };
 
 export default CreateBlog;
-

@@ -13,7 +13,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import blogSliceReducer from "./Slice/blogSlice";
-console.log(storage);
+
 const persistConfig = {
   key: "root",
   version: 1,

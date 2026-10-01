@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 import { User, FileText, MessageSquare, SquarePen } from "lucide-react";
 
@@ -38,4 +37,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-

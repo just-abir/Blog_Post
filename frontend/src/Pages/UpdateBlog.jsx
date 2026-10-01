@@ -83,7 +83,7 @@ const UpdateBlog = () => {
         navigate("/dashboard/your-blog");
       }
     } catch (error) {
-      console.log("Update error:", error);
+      console.log(error);
       toast.error("Failed to update blog");
     }
   };
@@ -104,7 +104,7 @@ const UpdateBlog = () => {
         toast.error("Failed to update status");
       }
     } catch (error) {
-      console.log("Publish toggle error:", error);
+      console.log(error);
       toast.error("Error toggling publish state");
     }
   };
@@ -123,7 +123,7 @@ const UpdateBlog = () => {
         navigate("/dashboard/your-blog");
       }
     } catch (error) {
-      console.log("Delete error:", error);
+      console.log(error);
       toast.error("Failed to delete blog");
     }
   };
@@ -300,4 +300,3 @@ const UpdateBlog = () => {
 };
 
 export default UpdateBlog;
-
